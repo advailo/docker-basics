@@ -1,0 +1,37 @@
+version: '3'
+
+networks:
+  tikls:
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/
+      - ../:/var/www
+    networks:
+      - tikls
+
+  mysql:
+    image: percona:5.6
+    container_name: mysql
+    networks:
+      - tikls
+    environment:
+      - MYSQL_ROOT_PASSWORD=docker
+      - MYSQL_USER=docker
+      - MYSQL_PASSWORD=docker
+      - MYSQL_DATABASE=aplikacija
+
+  php:
+    image: advailo/php-fpm:7.3
+    build: ./php-fpm
+    container_name: php
+    volumes:
+      - ./php-fpm/www.conf:/etc/php-fpm.d/www.conf
+      - ../:/var/www
+    networks:
+      - tikls

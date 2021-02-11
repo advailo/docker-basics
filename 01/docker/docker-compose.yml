@@ -1,0 +1,16 @@
+version: '3'
+
+networks:
+  tikls:
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/
+      - ../:/var/www
+    networks:
+      - tikls
